@@ -1,0 +1,22 @@
+# Optional: a PostgreSQL instance for running the project on Postgres instead
+# of the default SQLite. Start it, then point backend/.env at it:
+#
+#   docker compose up -d
+#   echo 'DATABASE_URL=postgres://hotel:hotel@localhost:5432/hotel' >> backend/.env
+#   pip install "psycopg[binary]"
+#   python manage.py migrate && python manage.py seed_demo
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: hotel
+      POSTGRES_PASSWORD: hotel
+      POSTGRES_DB: hotel
+    ports:
+      - "5432:5432"
+    volumes:
+      - hotel-db:/var/lib/postgresql/data
+
+volumes:
+  hotel-db:
