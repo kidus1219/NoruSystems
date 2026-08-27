@@ -1,12 +1,10 @@
-# Noru — Hotel Employee Management
+# Noru - Hotel Employee Management
 
 Staff module for a hotel: employees, departments, roles, shift patterns, rosters and
 attendance, plus the reports a duty manager actually asks for.
 
 Django 5.2 + DRF on the back, React + Vite on the front, SQLite by default.
 Light and dark themes, and it works on a phone.
-
-There is a separate [USAGE.md](USAGE.md) covering what each screen does.
 
 ## Running it
 
@@ -34,7 +32,7 @@ npm run dev
 | http://127.0.0.1:8000/api/docs/ | Swagger, generated off the code |
 | http://127.0.0.1:8000/admin/ | Django admin, needs `createsuperuser` |
 
-`pytest` from `backend/` runs the suite (66 tests).
+`pytest` from `backend/` runs the suite (67 tests).
 
 For Postgres: `docker compose up -d`, `pip install "psycopg[binary]"`, then set
 `DATABASE_URL=postgres://hotel:hotel@localhost:5432/hotel` in `backend/.env`.
@@ -101,7 +99,7 @@ one-shift-per-day rule would miss it. There's a test for it.
 **`Attendance.shift_assignment` is nullable.** That's what lets the schema hold all
 three cases: rostered and worked (linked), covered at short notice (unlinked), and
 never turned up (no attendance row at all, or one marked absent). The third case is
-the awkward one — an absence proved by a row that isn't there.
+the awkward one - an absence proved by a row that isn't there.
 
 **`worked_minutes` and `minutes_late` are computed in `save()`.** Lateness only means
 something next to the scheduled start, which is a three-table join. Deriving it per
@@ -118,7 +116,7 @@ out right.
 
 ## The interesting report
 
-`GET /api/reports/coverage-gaps/` — `hotel/reports.py::coverage_gaps`
+`GET /api/reports/coverage-gaps/` - `hotel/reports.py::coverage_gaps`
 
 For every `(date, shift, department)` that was planned, compare how many people were
 rostered against how many actually showed up, and return only the ones that came up
@@ -142,18 +140,18 @@ the annotation becomes a `HAVING`, so covered shifts never leave the database.
 
 The other three:
 
-- **department-summary** — headcount, roster volume, attendance and punctuality
+- **department-summary** - headcount, roster volume, attendance and punctuality
   rates, hours, labour cost.
-- **employee-scorecard** — per person, ranked inside their department with
+- **employee-scorecard** - per person, ranked inside their department with
   `Window(Rank())`. No-shows sort ahead of lateness.
-- **overtime** — `TruncWeek` and a `HAVING` on a configurable weekly threshold.
+- **overtime** - `TruncWeek` and a `HAVING` on a configurable weekly threshold.
 
 ### Watch the joins
 
 `department_summary` and `employee_scorecard` pull roster counts from subqueries
 rather than a second join. Joining `shift_assignments` and `attendance` in the same
 query gives a cross product. `Count` survives that with `distinct=True`, `Sum` and
-`Avg` don't — total hours quietly come back multiplied. It bit me during
+`Avg` don't - total hours quietly come back multiplied. It bit me during
 development; two tests now compare the ORM result against the same sum done in
 Python.
 
@@ -197,10 +195,10 @@ Bulk rostering skips what it can't create instead of failing the batch:
 
 ```
 cd backend && pytest -q
-66 passed
+67 passed
 ```
 
-`test_models.py` covers the constraints and clean() rules — overnight durations, the
+`test_models.py` covers the constraints and clean() rules - overnight durations, the
 cross-midnight overlap, role/department consistency, derived lateness and hours, the
 grace period. `test_api.py` covers CRUD, filtering, the assign failure, bulk skips
 and the clock lifecycle. `test_reports.py` asserts exact numbers against a five-day
