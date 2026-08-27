@@ -75,7 +75,7 @@ export function Shell() {
 
         <div className="sidebar-end">
           <ThemeToggle />
-          <span>Staff module · v1.0</span>
+          <span className="sidebar-version">Staff module · v1.0</span>
         </div>
       </aside>
 

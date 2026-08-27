@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./styles.css";
 import { ConfirmProvider } from "./components/confirm";
 import { Shell } from "./components/Shell";
+import { ThemeProvider } from "./lib/theme";
 import { AttendancePage } from "./pages/Attendance";
 import { EmployeesPage } from "./pages/Employees";
 import { OverviewPage } from "./pages/Overview";
@@ -18,20 +19,22 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ConfirmProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Shell />}>
-              <Route index element={<OverviewPage />} />
-              <Route path="employees" element={<EmployeesPage />} />
-              <Route path="scheduling" element={<SchedulingPage />} />
-              <Route path="attendance" element={<AttendancePage />} />
-              <Route path="reports" element={<ReportsPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </ConfirmProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ConfirmProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Shell />}>
+                <Route index element={<OverviewPage />} />
+                <Route path="employees" element={<EmployeesPage />} />
+                <Route path="scheduling" element={<SchedulingPage />} />
+                <Route path="attendance" element={<AttendancePage />} />
+                <Route path="reports" element={<ReportsPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </ConfirmProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   </StrictMode>,
 );
